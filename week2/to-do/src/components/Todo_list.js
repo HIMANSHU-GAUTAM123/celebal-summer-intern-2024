@@ -11,7 +11,10 @@ const ToDoList = () => {
 
   useEffect(() => {
     const storedTasks = JSON.parse(localStorage.getItem('tasks'));
+    
+    console.log(1)
     if (storedTasks) {
+      console.log(storedTasks);
       setTasks(storedTasks);
     }
   }, []);
@@ -33,7 +36,7 @@ const ToDoList = () => {
   };
 
   const toggleComplete = (index) => {
-    const newTasks = tasks.map((task, i) => 
+    const newTasks = sortedTasks.map((task, i) => 
       i === index ? { ...task, completed: !task.completed } : task
     );
     setTasks(newTasks);
@@ -49,7 +52,7 @@ const ToDoList = () => {
     return true;
   });
 
-  const sortedTasks = filteredTasks.sort((a, b) => {
+  const sortedTasks = [...filteredTasks].sort((a, b) => {
     if (sortOrder === 'asc') {
       return a.text.localeCompare(b.text);
     } else {
@@ -81,7 +84,9 @@ const ToDoList = () => {
       <ul className="task-list">
         {sortedTasks.map((task, index) => (
           <li key={index} className={task.completed ? 'completed' : ''}>
-            <span onClick={() => toggleComplete(index)}><FontAwesomeIcon icon={faCheck} /> {task.text}</span>
+            <span style={{ cursor: 'pointer' }} onClick={() => toggleComplete(index)}>
+              <FontAwesomeIcon icon={faCheck} /> {task.text}
+            </span>
             <button onClick={() => removeTask(index)}>
               <FontAwesomeIcon icon={faTrash} />
             </button>
